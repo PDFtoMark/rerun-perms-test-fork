@@ -1,0 +1,21 @@
+name: read-cache
+on: pull_request
+permissions:
+  contents: read
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    steps:
+      - name: restore default-branch cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: .git
+          key: git-repo
+      - name: dump what we got
+        run: |
+          echo "----- listing -----"
+          ls -la .git 2>&1 || echo "NO .git DIR"
+          echo "----- config -----"
+          cat .git/config 2>&1 || echo "NO CONFIG"
+          echo "----- grep token -----"
+          grep -r "ghp_FAKE_CACHESCOPE_TOKEN_12345" .git 2>&1 && echo "TOKEN_RECOVERED_FROM_CACHE" || echo "TOKEN_NOT_FOUND"
