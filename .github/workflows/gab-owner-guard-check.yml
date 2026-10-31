@@ -1,0 +1,19 @@
+name: gab-owner-guard-check
+on:
+  push:
+    branches: [main]
+permissions: read-all
+jobs:
+  guarded:
+    runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'open-telemetry' }}
+    steps:
+      - run: echo "GUARDED JOB RAN - guard true"
+  info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print owner
+        run: |
+          echo "repository=${{ github.repository }}"
+          echo "repository_owner=${{ github.repository_owner }}"
+          if [ "${{ github.repository_owner }}" = "open-telemetry" ]; then echo "GUARD=TRUE"; else echo "GUARD=FALSE"; fi
